@@ -325,13 +325,17 @@ constructor(
             }
         }
         val transitionToCookie = remember { mutableMapOf<TransitionState.Transition, Int>() }
+        val brightnessSettings = rememberQsBrightnessSettings()
         val sceneState =
             rememberMutableSceneTransitionLayoutState(
                 initialScene = remember { viewModel.expansionState.toIdleSceneKey() },
                 transitions =
                     transitions {
                         from(QuickQuickSettings, QuickSettings) {
-                            quickQuickSettingsToQuickSettings(viewModel::animateTilesExpansion::get)
+                            quickQuickSettingsToQuickSettings(
+                                animateTilesExpansion = viewModel::animateTilesExpansion::get,
+                                animateBrightnessSlider = { brightnessSettings.showSlider == 2 },
+                            )
                         }
                         to(SceneKeys.EditMode) {
                             spec = tween(durationMillis = EDIT_MODE_TIME_MILLIS)
